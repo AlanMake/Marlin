@@ -59,8 +59,12 @@
  *
  *  Default values are used for omitted arguments.
  */
-void GcodeSuite::M600() {
 
+extern void force_M600_begin_notify();//Workaround
+extern void force_M600_end_notify();//Workaround
+
+void GcodeSuite::M600() {
+	force_M600_begin_notify();//Workaround
   #if ENABLED(MIXING_EXTRUDER)
     const int8_t target_e_stepper = get_target_e_stepper_from_command();
     if (target_e_stepper < 0) return;
@@ -176,6 +180,7 @@ void GcodeSuite::M600() {
   #if ENABLED(MIXING_EXTRUDER)
     mixer.T(old_mixing_tool); // Restore original mixing tool
   #endif
+    force_M600_end_notify();//Workaround
 }
 
 #endif // ADVANCED_PAUSE_FEATURE
